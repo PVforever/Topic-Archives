@@ -11,6 +11,7 @@ $couponDao = new couponDao();
 $currentPage = $_SERVER["PHP_SELF"];
 $maxRows = 5;    // 每頁顯示幾筆記錄
 $pageNum = 0;    // 將要顯示哪一頁的資料(0表示第一頁)
+$searchName = "";    // 搜尋優惠券名稱內容
 
 
 
@@ -24,7 +25,7 @@ if (isset($_GET['pageNum'])) {
 $startRow = $pageNum * $maxRows;    // 算出將要顯示的分頁是由哪一筆開始(0表示第一筆)
 
 
-// 算出總共有多少筆商品的SQL敘述，Book表格的總紀錄筆數
+// 算出總共有多少筆商品的SQL敘述，coupon表格的總筆數
 // 如果外界有透過GET方法傳入totalRows(表格的總紀錄筆數)
 if (isset($_GET['totalRows'])) {
   $totalRows = $_GET['totalRows'];
@@ -84,7 +85,15 @@ function quanumber($row) {
   }
 }
 
+$arr2D = $couponDao->findWithinRange($startRow, $maxRows);
+
+if(!empty($_POST["searchName"])) // 確定是否存在資料
+{
+  $searchName = $_POST["searchName"];
+  $arr2D = $couponDao->findWithName($startRow, $maxRows, $searchName);  // 模糊查詢
+}
 ?>
+
 <!DOCTYPE html >
 <html>
 <head>
@@ -112,8 +121,10 @@ function quanumber($row) {
             <option value="where use_type ='2'">指定商品</option>
           </select>
         </form>
-        <input class="form-control me-2" name="searchName" id="myInput" type="search" placeholder="請輸入優惠券名稱" aria-label="Search" required>
-        <button class="btn btn-outline-danger search" type="submit">搜尋</button>
+        <form class="m-0 d-flex" action="coupon_index.php" method="post">
+          <input class="form-control me-2" name="searchName" type="search" placeholder="輸入優惠券名稱" aria-label="Search" value="<?php echo $searchName ?>">
+          <input class="btn btn-outline-danger search" type="submit" value="搜尋">
+        </form>
       </div>
     </div>
     <table class="table table-dark table-hover text-center">
@@ -138,11 +149,11 @@ function quanumber($row) {
         </tr>
       </thead>
       <tbody class="align-middle">
-        <?php           
+        <?php
         // 由資料庫中讀取LIMIT所限制的所有記錄，放入變數$result內
         // $result = $pdo->prepare($query_limit_records);
         // $result->execute();  //沒有需要提供給$PDOStatement的參數
-        $arr2D = $couponDao->findWithinRange($startRow, $maxRows);
+        // $arrSearchName = $couponDao->findWithName($searchName);
         foreach($arr2D as $row){ ?>
           <tr style="height: 120px;">
             <td><?php echo $row['coupon_id']; ?></td>
@@ -171,7 +182,7 @@ function quanumber($row) {
               <button class="btn btn-danger" onclick="confirmDelete(<?php echo $row['coupon_id'] ?>)">刪除</button>
             </td>
           </tr>
-          <?php } ?>
+        <?php } ?>        
       </tbody>
     </table>
 
@@ -263,8 +274,7 @@ function quanumber($row) {
   };
 
   //每當切換滑桿時，要變更checkbox的value，並傳回資料庫
-  const listTodo = $('#SwitchCheck');
-  
+  const listTodo = $('#SwitchCheck');  
   $('td').on("change", 'input', function () {
     $x = $(this);
 
@@ -283,7 +293,7 @@ function quanumber($row) {
       data: {'value':c_value, "id":c_id},
       datatype: 'json'
     })
-  })
+  });
 
 </script>
 </body>

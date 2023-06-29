@@ -120,19 +120,6 @@
           return $arr2D;
         }
 
-        //查尋使用類型
-        public function findUseType() {
-          $query =   "SELECT * 
-                      FROM coupon
-                      WHERE use_type LIKE :u_type"; 
-
-          $pdoStmt =  $this->pdo->prepare($query);
-          
-          $pdoStmt->execute();
-          $arr2D = $pdoStmt->fetchAll(PDO::FETCH_ASSOC);
-          return $arr2D;
-        }
-
         //變更狀態
         public function updateEnabled_stateById($e_sta,$id) {
           $query = "UPDATE coupon c SET c.enabled_state = :e_sta WHERE c.coupon_id = :id";
@@ -157,14 +144,57 @@
         return $arr2D;
       }
 
+      //範圍查找
+      // public function findWithinRange($startRow, $maxRow, $searchName) {
+      //   if($searchName === ""){
+      //     $query =  " SELECT c.*
+      //               FROM coupon c  
+      //               LIMIT :start, :max "; 
+      //     $pdoStmt =  $this->pdo->prepare($query);
+      //     $pdoStmt->bindValue(":start",  $startRow, PDO::PARAM_INT);
+      //     $pdoStmt->bindValue(":max",  $maxRow, PDO::PARAM_INT);
+      //   }else{
+      //     $query =  " SELECT c.*
+      //               FROM coupon c
+      //               WHERE c.coupon_name LIKE CONCAT('%', :nam, '%')
+      //               LIMIT :start, :max";
+      //     $pdoStmt =  $this->pdo->prepare($query);
+      //     $pdoStmt->bindValue(":nam",  $searchName, PDO::PARAM_STR);
+      //     $pdoStmt->bindValue(":start",  $startRow, PDO::PARAM_INT);
+      //     $pdoStmt->bindValue(":max",  $maxRow, PDO::PARAM_INT);
+      //   }
+        
+      //   $pdoStmt->execute();
+      //   $arr2D = $pdoStmt->fetchAll(PDO::FETCH_ASSOC);
+      //   return $arr2D;
+      // }
+
       //查尋名稱
-      public function findWithName() {
+      public function findWithName($startRow, $maxRow, $searchName) {
+        $query =   " SELECT c.*
+                    FROM coupon c
+                    WHERE c.coupon_name LIKE CONCAT('%', :nam, '%')
+                    LIMIT :start, :max";
+        $pdoStmt =  $this->pdo->prepare($query);
+        $pdoStmt->bindValue(":nam", $searchName, PDO::PARAM_STR);
+        $pdoStmt->bindValue(":start",  $startRow, PDO::PARAM_INT);
+        $pdoStmt->bindValue(":max",  $maxRow, PDO::PARAM_INT);
+        $pdoStmt->execute();
+        $arr2D = $pdoStmt->fetchAll(PDO::FETCH_ASSOC);
+        return $arr2D;
+      }
+
+      //查尋使用類型
+      public function findUseType($startRow, $maxRow, $useType) {
         $query =   "SELECT * 
                     FROM coupon
-                    WHERE coupon_name LIKE %:name%"; 
+                    WHERE use_type LIKE :u_type
+                    LIMIT :start, :max";
 
         $pdoStmt =  $this->pdo->prepare($query);
-        
+        $pdoStmt->bindValue(":u_type", $useType, PDO::PARAM_INT);
+        $pdoStmt->bindValue(":start",  $startRow, PDO::PARAM_INT);
+        $pdoStmt->bindValue(":max",  $maxRow, PDO::PARAM_INT);
         $pdoStmt->execute();
         $arr2D = $pdoStmt->fetchAll(PDO::FETCH_ASSOC);
         return $arr2D;
