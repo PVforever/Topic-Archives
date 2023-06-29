@@ -120,19 +120,6 @@
           return $arr2D;
         }
 
-        //查尋名稱
-        public function findName() {
-          $query =   "SELECT * 
-                      FROM coupon
-                      WHERE coupon_name LIKE '%:name%'"; 
-
-          $pdoStmt =  $this->pdo->prepare($query);
-          
-          $pdoStmt->execute();
-          $arr2D = $pdoStmt->fetchAll(PDO::FETCH_ASSOC);
-          return $arr2D;
-        }
-
         //查尋使用類型
         public function findUseType() {
           $query =   "SELECT * 
@@ -165,6 +152,19 @@
         $pdoStmt =  $this->pdo->prepare($query);
         $pdoStmt->bindValue(":start",  $startRow, PDO::PARAM_INT);
         $pdoStmt->bindValue(":max",  $maxRow, PDO::PARAM_INT);
+        $pdoStmt->execute();
+        $arr2D = $pdoStmt->fetchAll(PDO::FETCH_ASSOC);
+        return $arr2D;
+      }
+
+      //查尋名稱
+      public function findWithName() {
+        $query =   "SELECT * 
+                    FROM coupon
+                    WHERE coupon_name LIKE %:name%"; 
+
+        $pdoStmt =  $this->pdo->prepare($query);
+        
         $pdoStmt->execute();
         $arr2D = $pdoStmt->fetchAll(PDO::FETCH_ASSOC);
         return $arr2D;

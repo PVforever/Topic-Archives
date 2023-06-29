@@ -4,12 +4,12 @@
     require_once('CRUD_Main_Class.php');
     require_once('coupon_basic.php');
     $couponDao = new couponDao();
-$a =$_POST['a'];
-$b =$_POST['id'];
+    $e_sta =$_POST['value'];
+    $id =$_POST['id'];
 
 
 
-    $couponDao ->updateEnabled_stateById($a,$b);
+    $couponDao ->updateEnabled_stateById($e_sta,$id);
 
 
 

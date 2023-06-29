@@ -266,29 +266,23 @@ function quanumber($row) {
   const listTodo = $('#SwitchCheck');
   
   $('td').on("change", 'input', function () {
-    
     $x = $(this);
+
     if(this.checked == true) {
       $x.attr('value','');
     }else{
       $x.attr('value','S');
     };
-    const a = $(this).attr('value');
-    const b = $(this).parents('tr').children('td:nth-child(1)').text();
 
-
-
+    const c_value = $(this).attr('value');
+    const c_id = $(this).parents('tr').children('td:nth-child(1)').text();
 
     $.ajax({
       url: 'updateEnabledState.php',
       type: 'POST',
-      data: {'':a, "id":b},
+      data: {'value':c_value, "id":c_id},
       datatype: 'json'
     })
-    
-    // .done(function (data) {
-
-    // })
   })
 
 </script>
