@@ -1,9 +1,9 @@
 <?php 
 session_start(); 
 ?>
-<?php require_once('conn.php'); ?>
-<?php require_once('CRUD_Main_Class.php'); ?>
-<?php require_once('coupon_basic.php'); ?>
+<?php require_once('linkSettings/conn.php'); ?>
+<?php require_once('serverImplement/CRUD_Main_Class.php'); ?>
+<?php require_once('linkSettings/coupon_basic.php'); ?>
 
 <?php
 $couponDao = new couponDao();
@@ -85,12 +85,14 @@ function quanumber($row) {
   }
 }
 
-$arr2D = $couponDao->findWithinRange($startRow, $maxRows);
-
+// $arr2D = $couponDao->findWithinRange($startRow, $maxRows);
 if(!empty($_POST["searchName"])) // 確定是否存在資料
 {
   $searchName = $_POST["searchName"];
-  $arr2D = $couponDao->findWithName($startRow, $maxRows, $searchName);  // 模糊查詢
+  $arr2D = $couponDao->findWithName($startRow, $maxRows, $searchName);  // 模糊查詢'
+  
+}else{
+  $arr2D = $couponDao->findWithinRange($startRow, $maxRows);
 }
 ?>
 
@@ -160,7 +162,7 @@ if(!empty($_POST["searchName"])) // 確定是否存在資料
             <td><?php echo $row['coupon_name']; ?></td>
             <!--  <img src="此屬性可以是一張圖片的URL或是一個可以送回一張圖片的PHP程式,需要傳入圖片的識別鍵值(即圖片所屬紀錄的Primary Key)"   ...> -->
             <td>
-                <img src="coupon_Icon.php?searchKey=<?php echo $row['coupon_id']; ?>" alt="" />
+                <img src="serverImplement/coupon_Icon.php?searchKey=<?php echo $row['coupon_id']; ?>" alt="" />
                 <!-- <?php echo $image_name; ?> -->
             </td>
             <td><?php echo $row['coupon_code']; ?></td>
@@ -177,7 +179,7 @@ if(!empty($_POST["searchName"])) // 確定是否存在資料
             </td>
 
             <td>
-              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#seeMore">查看</button>
+              <button type="button" id="lookAllbtn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#seeMore">查看</button>
               <button class="btn btn-secondary"><a href="couponUpdate.php?coupon_id=<?php echo $row['coupon_id'] ?>">編輯</a></button>
               <button class="btn btn-danger" onclick="confirmDelete(<?php echo $row['coupon_id'] ?>)">刪除</button>
             </td>
@@ -232,18 +234,18 @@ if(!empty($_POST["searchName"])) // 確定是否存在資料
   </div>
   <!-- 查看彈出視窗 -->
   <div class="modal fade" id="seeMore" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header border-0">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">詳細資料</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">詳細資料</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -264,7 +266,7 @@ if(!empty($_POST["searchName"])) // 確定是否存在資料
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire(
-          location.href = 'couponDelete.php?coupon_id=' + e,
+          location.href = 'serverImplement/couponDelete.php?coupon_id=' + e,
           '刪除!',
           '優惠券已刪除',
           '關閉'
@@ -288,12 +290,31 @@ if(!empty($_POST["searchName"])) // 確定是否存在資料
     const c_id = $(this).parents('tr').children('td:nth-child(1)').text();
 
     $.ajax({
-      url: 'updateEnabledState.php',
+      url: 'serverImplement/updateEnabledState.php',
       type: 'POST',
       data: {'value':c_value, "id":c_id},
       datatype: 'json'
     })
   });
+
+  //點擊查看生成內容
+  // const lookAllbtn = $('#lookAllbtn');  
+  // $('td').on("click", 'button:nth-child(1)', function () {
+  //   const c_id = $(this).parents('tr').children('td:nth-child(1)').text();
+
+  //   $.ajax({
+  //     url: 'serverImplement/ShowCouponFlie.php',
+  //     type: 'GET',
+  //     data: {"id":c_id},
+  //     datatype: 'html'
+  //   }).done(function(data){
+
+  //     console.log(data);
+  //      for(let $i = 0 ; $i < 10 ; $i++){
+  //        console.log(data[$i]);
+      //  };
+        
+    // });
 
 </script>
 </body>

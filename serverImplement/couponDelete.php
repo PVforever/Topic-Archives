@@ -1,8 +1,8 @@
 <?php 
    session_start();
-   require_once('conn.php');
+   require_once('../linkSettings/conn.php');
    require_once('CRUD_Main_Class.php');
-   require_once('coupon_basic.php');
+   require_once('../linkSettings/coupon_basic.php');
    /* 
       程式的功能：.
       刪除book表格內的某筆記錄。
@@ -32,5 +32,5 @@
       $_SESSION['coupon_Message'] = '優惠券:' . $coupon_name . '刪除失敗';
       // 通知瀏覽器，對BookList.php發出新的請求
    }
-   header('Location: coupon_index.php');
+   header('Location: ../coupon_index.php');
 ?>

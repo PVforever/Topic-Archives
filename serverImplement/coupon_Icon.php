@@ -2,7 +2,7 @@
     error_reporting(E_ALL ^ E_DEPRECATED); // 通知PHP顯示除了Deprecated之外的所有訊息 
 	session_start(); 
 	ob_start();
-    require_once('conn.php'); 
+    require_once('../linkSettings/conn.php'); 
 ?>
 <?php
 /* 

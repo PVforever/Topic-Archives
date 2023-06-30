@@ -1,7 +1,7 @@
 <?php session_start(); ?>
-<?php require_once('conn.php'); ?>
-<?php require_once('CRUD_Main_Class.php'); ?>
-<?php require_once('coupon_basic.php'); ?>
+<?php require_once('linkSettings/conn.php'); ?>
+<?php require_once('serverImplement/CRUD_Main_Class.php'); ?>
+<?php require_once('linkSettings/coupon_basic.php'); ?>
 
 
 <?php
@@ -263,10 +263,20 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
 			<!-- 發放數量 -->
 			<div class="col-6 mb-5">
 				<div class="d-flex align-items-center">
-					<label for="Inputqua" class="form-label me-2 fw-bold">發放數量</label>
-					<input name="quantity" type="number" class="form-control border-3" id="Inputqua" value="<?php echo $quantity; ?>">
+					<label class="form-label me-2 fw-bold">發放數量</label>
+					<div class="d-flex w-100 align-items-center">
+						<div>
+							<input name="quant" class="form-check-input" type="radio" id="Inputquaunlimited" <?php echo $quantity == -1 ? "checked" : "" ?>>
+							<label class="form-check-label" for="Inputquaunlimited">無限制</label>
+						</div>
+						<div class="ms-2">
+							<input name="quant" class="form-check-input" type="radio" id="InpuInputquauny" <?php echo $quantity == -1 ? "" : "checked" ?>>
+							<label class="form-check-label" for="InpuInputquauny">輸入數量</label>
+						</div>
+						<input style="display: none;" name="quantity" type="number" min="1" class="form-control w-100 ms-2 border-3" id="Inputqua" value="<?php echo $quantity == -1 ? -1 : $quantity; ?>">
+					</div>
 				</div>
-				<div class="text-danger text-end mt-2"><?php echo $errQuantity; ?></div>
+				<div id="errQua" class="text-danger text-end mt-2"><?php echo $errQuantity; ?></div>
 			</div>
 			<!-- 限領張數 -->
 			<div class="col-6 mb-5">
@@ -353,7 +363,7 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
 				<div class="d-flex w-100">
 					<label for="Input_icon" class="form-label me-2 fw-bold">圖片</label>
 					<div class="img_border border-3 rounded-3 w-100">
-						<img id="image" src='coupon_Icon.php?searchKey=<?php echo $coupon_id ?>'/>
+						<img id="image" src='serverImplement/coupon_Icon.php?searchKey=<?php echo $coupon_id ?>'/>
 						<input name="uploadFile" type="file" class="form-control w-auto" id="Input_icon">
 					</div>
 				</div>
@@ -408,39 +418,53 @@ if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form1")) {
 		const radiolimit = document.querySelector('#radiolimit');
 		const Inputper = document.getElementById('Inputper');
 		const errlimit = document.getElementById('errlimit');
+
+		//x, y, z, w = 無限制, 限制, 數量, 錯誤訊息
+		function withRestrictions(x, y, z, w){
+			if (x.checked) {
+				z.style.display = 'none';
+			} else if (y.checked) {
+				z.style.display = 'block';
+			}
+
+			y.addEventListener('change', function() {
+				if (this.checked) {
+					z.style.display = 'block';
+					z.value = "";
+					w.style.display = 'block';
+
+				} else {
+					z.style.display = 'none';
+					w.style.display = 'none';
+				}
+			});
+
+			x.addEventListener('change', function() {
+				if (this.checked) {
+					z.style.display = 'none';
+					w.style.display = 'none';
+					z.value = -1;
+				} else {
+					z.style.display = 'block';
+					w.style.display = 'block';
+				}
+			});
+		};
+
+		withRestrictions(radiounlimited,radiolimit,Inputper,errlimit);
+
+		const Inputquaunlimited = document.querySelector('#Inputquaunlimited');
+		const InpuInputquauny = document.querySelector('#InpuInputquauny');
+		const Inputqua = document.getElementById('Inputqua');
+		const errQua = document.getElementById('errQua');
+
+		withRestrictions(Inputquaunlimited,InpuInputquauny,Inputqua,errQua);
+
+	</script>
+	<!-- 圖片修改即時更新 -->
+	<script>
 		const Input_icon = document.getElementById('Input_icon');
 		const image = document.getElementById('image');
-		
-
-		if (radiounlimited.checked) {
-			Inputper.style.display = 'none';
-		} else if (radiolimit.checked) {
-			Inputper.style.display = 'block';
-		}
-
-		radiolimit.addEventListener('change', function() {
-			if (this.checked) {
-				Inputper.style.display = 'block';
-				Inputper.value = "";
-				errlimit.style.display = 'block';
-
-			} else {
-				Inputper.style.display = 'none';
-				errlimit.style.display = 'none';
-			}
-		});
-
-		radiounlimited.addEventListener('change', function() {
-			if (this.checked) {
-				Inputper.style.display = 'none';
-				errlimit.style.display = 'none';
-				Inputper.value = -1;
-			} else {
-				Inputper.style.display = 'block';
-				errlimit.style.display = 'block';
-			}
-		});
-
 		Input_icon.onchange = function() {
 			image.src = URL.createObjectURL(Input_icon.files[0]);
 		};
