@@ -182,7 +182,7 @@ if(!empty($_GET["searchName"])) {// 確定是否存在資料
           // $arrSearchName = $couponDao->findWithName($searchName);
           foreach($arr2D as $row){ ?>
             <div class="couponList <?php echo ($row['enabled_state'] == 'S') ? 'couponClose' : 'couponOpen'; ?>" id="couponList">
-              <div class="row flex-nowrap">
+              <div class="row">
                 <div class="col my-auto fw-bold"><?php echo $row['coupon_id']; ?></div>
                 <div class="col my-auto"><?php echo $row['coupon_name']; ?></div>
                 <!--  <img src="此屬性可以是一張圖片的URL或是一個可以送回一張圖片的PHP程式,需要傳入圖片的識別鍵值(即圖片所屬紀錄的Primary Key)"   ...> -->

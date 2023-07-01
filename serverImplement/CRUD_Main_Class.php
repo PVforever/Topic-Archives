@@ -187,7 +187,6 @@
         return $arr2D;
       }
 
-
       //查尋名稱
       public function findWithName($startRow, $maxRow, $searchName) {
         if(!(is_null($startRow) && is_null($maxRow))){
