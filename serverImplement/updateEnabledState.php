@@ -1,20 +1,13 @@
 <?php 
     // 依照前端送來的suspended[]來更新User的suspended欄位
-    require_once('conn.php');
+    require_once('../linkSettings/conn.php');
     require_once('CRUD_Main_Class.php');
-    require_once('coupon_basic.php');
+    require_once('../linkSettings/coupon_basic.php');
     $couponDao = new couponDao();
     $e_sta =$_POST['value'];
     $id =$_POST['id'];
 
-
-
     $couponDao ->updateEnabled_stateById($e_sta,$id);
-
-
-
-
-
   
     // if (!isset($_POST['enabled_state'])){
     //     if (isset($_POST['enabled_state'])){           // 如果前端有送suspended欄位的值

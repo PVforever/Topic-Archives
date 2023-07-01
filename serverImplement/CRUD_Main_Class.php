@@ -94,8 +94,51 @@
           $pdoStmt->execute();
           $row = $pdoStmt->fetch(PDO::FETCH_ASSOC);
           return $row;
+
+
+
+          
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
         // function findBySalaryRange($min, $max) {
         //     $query =   "SELECT * FROM `coupon` c " .
         //                 " WHERE c.salary BETWEEN :min AND :max" ; 
@@ -132,10 +175,10 @@
 
       //範圍查找
       public function findWithinRange($startRow, $maxRow) {
+        
         $query =  " SELECT c.*
                     FROM coupon c  
                     LIMIT :start, :max "; 
-
         $pdoStmt =  $this->pdo->prepare($query);
         $pdoStmt->bindValue(":start",  $startRow, PDO::PARAM_INT);
         $pdoStmt->bindValue(":max",  $maxRow, PDO::PARAM_INT);
@@ -144,41 +187,26 @@
         return $arr2D;
       }
 
-      //範圍查找
-      // public function findWithinRange($startRow, $maxRow, $searchName) {
-      //   if($searchName === ""){
-      //     $query =  " SELECT c.*
-      //               FROM coupon c  
-      //               LIMIT :start, :max "; 
-      //     $pdoStmt =  $this->pdo->prepare($query);
-      //     $pdoStmt->bindValue(":start",  $startRow, PDO::PARAM_INT);
-      //     $pdoStmt->bindValue(":max",  $maxRow, PDO::PARAM_INT);
-      //   }else{
-      //     $query =  " SELECT c.*
-      //               FROM coupon c
-      //               WHERE c.coupon_name LIKE CONCAT('%', :nam, '%')
-      //               LIMIT :start, :max";
-      //     $pdoStmt =  $this->pdo->prepare($query);
-      //     $pdoStmt->bindValue(":nam",  $searchName, PDO::PARAM_STR);
-      //     $pdoStmt->bindValue(":start",  $startRow, PDO::PARAM_INT);
-      //     $pdoStmt->bindValue(":max",  $maxRow, PDO::PARAM_INT);
-      //   }
-        
-      //   $pdoStmt->execute();
-      //   $arr2D = $pdoStmt->fetchAll(PDO::FETCH_ASSOC);
-      //   return $arr2D;
-      // }
 
       //查尋名稱
       public function findWithName($startRow, $maxRow, $searchName) {
-        $query =   " SELECT c.*
+        if(!(is_null($startRow) && is_null($maxRow))){
+          $query =   " SELECT c.*
                     FROM coupon c
                     WHERE c.coupon_name LIKE CONCAT('%', :nam, '%')
-                    LIMIT :start, :max";
-        $pdoStmt =  $this->pdo->prepare($query);
-        $pdoStmt->bindValue(":nam", $searchName, PDO::PARAM_STR);
-        $pdoStmt->bindValue(":start",  $startRow, PDO::PARAM_INT);
-        $pdoStmt->bindValue(":max",  $maxRow, PDO::PARAM_INT);
+                    LIMIT :start, :max" ;
+          $pdoStmt =  $this->pdo->prepare($query);
+          $pdoStmt->bindValue(":nam", $searchName, PDO::PARAM_STR);
+          $pdoStmt->bindValue(":start",  $startRow, PDO::PARAM_INT);
+          $pdoStmt->bindValue(":max",  $maxRow, PDO::PARAM_INT);
+        }else{
+          $query =   " SELECT c.*
+                    FROM coupon c
+                    WHERE c.coupon_name LIKE CONCAT('%', :nam, '%')" ;
+          $pdoStmt =  $this->pdo->prepare($query);
+          $pdoStmt->bindValue(":nam", $searchName, PDO::PARAM_STR);
+        }
+        
         $pdoStmt->execute();
         $arr2D = $pdoStmt->fetchAll(PDO::FETCH_ASSOC);
         return $arr2D;
@@ -262,7 +290,7 @@
         return $num;
       }
 
-
+      
     
     }
     ?>

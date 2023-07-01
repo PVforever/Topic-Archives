@@ -1,7 +1,7 @@
 <?php session_start(); ?>
-<?php require_once('conn.php'); ?>
-<?php require_once('CRUD_Main_Class.php'); ?>
-<?php require_once('coupon_basic.php'); ?>
+<?php require_once('linkSettings/conn.php'); ?>
+<?php require_once('serverImplement/CRUD_Main_Class.php'); ?>
+<?php require_once('linkSettings/coupon_basic.php'); ?>
 <?php
 /* 
    程式功能：新增一筆記錄到book表格內。.
@@ -200,178 +200,192 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 <meta charset="utf-8" />
 <title>優惠券新增</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link rel="stylesheet" href="css/pixel.css">
+<link rel="stylesheet" href="css/uiSuite.css">
 <style>
 	.img_border{
-		height: 130px;
-		border: 1px solid #ced4da;
+		height: 100px;
 	}
 </style>
 </head>
-<body onload="setFocus('Inputname')">
+<body class="insertBasemap" onload="setFocus('Inputname')">
   <div class="container">
-    <h4 class="fw-bold mt-5">優惠券新增</h4>
-<!-- 上傳檔案時<form>標籤的 enctype屬性必須是 "multipart/form-data" -->
-    <form class="row text-nowrap py-4" id="form1" name="form1" method="post" action="couponInsert.php"  enctype="multipart/form-data" >
-      		<!-- 名稱 -->
-			<div class="col-6 mb-5">
-				<div class="d-flex align-items-center">
-					<label for="Inputname" class="form-label me-2 fw-bold">名稱</label>
-					<input name="coupon_name" type="text" class="border-3 form-control" id="Inputname" value="<?php echo $coupon_name; ?>">
-				</div>
-				<div class="text-danger text-end mt-2"><?php echo $errCoupon_name; ?></div>
-			</div>
-			<!-- 代碼 -->
-			<div class="col-6 mb-5">
-				<div class="d-flex align-items-center">
-					<label for="Inputcode" class="form-label me-2 fw-bold">代碼</label>
-					<input name="coupon_code" type="text" class="border-3 form-control" id="Inputcode" value="<?php echo $coupon_code; ?>">
-				</div>
-				<div class="text-danger text-end mt-2"><?php echo $errCoupon_code; ?></div>
-			</div>
-			<!-- 折抵金額 -->
-			<div class="col-6 mb-5">
-				<div class="d-flex align-items-center">
-					<label for="Inputamo" class="form-label me-2 fw-bold">折抵金額</label>
-					<input name="amount" type="number" class="border-3 form-control" id="Inputamo" value="<?php echo $amount; ?>">
-				</div>
-				<div class="text-danger text-end mt-2"><?php echo $errAmount; ?></div>
-			</div>
-			<!-- 金額限制 -->
-			<div class="col-6 mb-5">
-				<div class="d-flex align-items-center">
-					<label for="Inputmin" class="form-label me-2 fw-bold">金額限制</label>
-					<input name="min_point" type="number" class="border-3 form-control" id="Inputmin" value="<?php echo $min_point; ?>">
-				</div>
-				<div class="text-danger text-end mt-2"><?php echo $errMin_point; ?></div>
-			</div>
-			<!-- 發放數量 -->
-			<div class="col-6 mb-5">
-				<div class="d-flex align-items-center">
-					<label for="Inputqua" class="form-label me-2 fw-bold">發放數量</label>
-					<input name="quantity" type="number" class="border-3 form-control" id="Inputqua" value="<?php echo $quantity; ?>">
-				</div>
-				<div class="text-danger text-end mt-2"><?php echo $errQuantity; ?></div>
-			</div>
-			<!-- 限領張數 -->
-			<div class="col-6 mb-5">
-				<div class="d-flex align-items-center">
-					<label class="form-label me-2 fw-bold">限領張數</label>
-					<!-- <input name="per_limit" type="checkbox" class="form-control" id="Inputper"> -->
-					<div class="d-flex w-100 align-items-center">
-						<div>
-							<input name="limit" class="form-check-input" type="radio" id="radiounlimited" <?php echo $per_limit == -1 ? "checked" : "" ?>>
-							<label class="form-check-label" for="radiounlimited">無限制</label>
-						</div>
-						<div class="ms-2">
-							<input name="limit" class="form-check-input" type="radio" id="radiolimit" <?php echo $per_limit == -1 ? "" : "checked" ?>>
-							<label class="form-check-label" for="radiolimit">輸入數量</label>
-						</div>
-						<input style="display: none;" name="per_limit" type="number" class="form-control w-100 ms-2 border-3" id="Inputper" value="<?php echo $per_limit == -1 ? -1 : $per_limit; ?>">
-					</div>
-				</div>
-				<div id="errlimit" class="text-danger text-end mt-2"><?php echo $errPer_limit; ?></div>
-			</div>
-			<!-- 優惠券類型 -->
-			<div class="col-6 mb-5">
-				<div class="d-flex align-items-center">
-					<label for="Input_c_type" class="form-label me-2 fw-bold">優惠券類型</label>
-					<select class="form-select border-3" id="Input_c_type" name="coupon_type" required>
-						<option value="0" selected>請選擇</option>
-						<option value="1" <?php echo $coupon_type == "1" ? "selected" : "" ?>>免運券</option>
-						<option value="2" <?php echo $coupon_type == "2" ? "selected" : "" ?>>註冊禮券</option>
-						<option value="3" <?php echo $coupon_type == "3" ? "selected" : "" ?>>生日禮券</option>
-						<option value="4" <?php echo $coupon_type == "4" ? "selected" : "" ?>>購物禮券</option>
-						<option value="5" <?php echo $coupon_type == "5" ? "selected" : "" ?>>平台禮券</option>
-					</select>
-				</div>
-				<div class="text-danger text-end mt-2"><?php echo $errCoupon_type; ?></div>
-			</div>
-			<!-- 使用類型 -->
-			<div class="col-6 mb-5">
-				<div class="d-flex align-items-center">
-					<div class="mb-3 me-2 fw-bold">使用類型</div>
-					<div class="btn-group mb-3 w-100" role="group" aria-label="Basic radio toggle button group">
-						<input type="radio" class="btn-check" name="use_type" id="alluse" autocomplete="off" value="0" checked>
-						<label class="btn btn-outline-primary" for="alluse">平台通用</label>
-
-						<input type="radio" class="btn-check" name="use_type" id="classuse" autocomplete="off" value="1" <?php echo $use_type == "1" ? "checked" : "" ?>>
-						<label class="btn btn-outline-primary" for="classuse">指定書類</label>
-
-						<input type="radio" class="btn-check" name="use_type" id="bookuse" autocomplete="off" value="2" <?php echo $use_type == "2" ? "checked" : "" ?>>
-						<label class="btn btn-outline-primary" for="bookuse">指定商品</label>
-					</div>
-				</div>
-				<div class="text-danger text-end mt-2"><?php echo $errUse_type; ?></div>
-			</div>
-			<!-- 疊加使用 -->
-			<div class="col-6 mb-5">
-				<div class="d-flex align-items-center">
-					<div class="me-3 fw-bold">疊加使用</div>
-					<div class="d-flex">
-						<div class="form-check m-1">
-							<input class="form-check-input" type="radio" name="overlay" id="overlayon" value="1" <?php echo $overlay == "1" ? "checked" : "" ?>>
-							<label class="form-check-label" for="overlayon">可疊加</label>
-						</div>
-						<div class="form-check m-1">
-							<input class="form-check-input" type="radio" name="overlay" id="overlayout" value="0" checked>
-							<label class="form-check-label" for="overlayout">不可疊加</label>
-						</div>
-					</div>
-					<div class="text-danger text-end mt-2 w-100"><?php echo $errOverlay; ?></div>
-				</div>
-			</div>
-			<!-- 會員等級 -->
-			<div class="col-6 mb-5">
-				<div class="d-flex align-items-center">
-					<label for="memberlv" class="form-label me-2 fw-bold">會員等級</label>
-					<select class="form-select border-3" id="memberlv" aria-label="Default select example" name="level_id" required>
-						<option value="0" selected>請選擇</option>
-						<option value="1" <?php echo $level_id == "1" ? "selected" : "" ?>>無限制</option>
-						<option value="2" <?php echo $level_id == "2" ? "selected" : "" ?>>高級會員</option>
-					</select>
-				</div>
-				<div class="text-danger text-end mt-2"><?php echo $errLevel_id; ?></div>
-			</div>	
-			<!-- 圖片 -->
-			<div class="col-6 mb-5">
-				<div class="d-flex w-100">
-					<label for="Input_icon" class="form-label me-2 fw-bold">圖片</label>
-					<div class="img_border border-3 rounded-3 w-100">
-						<img src="" id="image">
-						<input name="uploadFile" type="file" class="form-control w-auto" id="Input_icon">
-					</div>
-				</div>
-				<div class="text-danger text-end mt-2"><?php echo $errPicture; ?></div>
-			</div>
-			<!-- 開始時間 -->
-			<div class="col-6">
-				<div class="col mb-5">
+	<div class="board p-5 my-5">
+		<div class="insert-title">
+			<h4 class="d-flex justify-content-center fw-bold py-3 m-0">優惠券新增</h4>
+		</div>
+		<form class="row text-nowrap pt-5" id="form1" name="form1" method="post" action="couponInsert.php"  enctype="multipart/form-data">
+				<!-- 名稱 -->
+				<div class="col-6 mb-3">
 					<div class="d-flex align-items-center">
-						<label for="Input_s_time" class="form-label me-2 fw-bold">開始時間</label>
-						<input name="start_time" type="datetime-local" class="form-control border-3" id="Input_s_time" value="<?php echo $start_time; ?>">
+						<label for="Inputname" class="form-label me-3 fw-bold">名稱</label>
+						<input class="Inputbox w-100 py-2" name="coupon_name" type="text" class="border-3 form-control" id="Inputname" value="<?php echo $coupon_name; ?>">
 					</div>
-					<div class="text-danger text-end mt-2"><?php echo $errStart_time; ?></div>
+					<div class="text-danger text-end mt-2"><?php echo $errCoupon_name; ?></div>
 				</div>
-			<!-- 結束時間 -->
-				<div class="col mb-5">
+				<!-- 代碼 -->
+				<div class="col-6 mb-3">
 					<div class="d-flex align-items-center">
-						<label for="Input_e_time" class="form-label me-2 fw-bold">結束時間</label>
-						<input name="end_time" type="datetime-local" class="form-control border-3" id="Input_e_time" value="<?php echo $end_time; ?>">
+						<label for="Inputcode" class="form-label me-3 fw-bold">代碼</label>
+						<input class="Inputbox w-100 py-2" name="coupon_code" type="text" class="border-3 form-control" id="Inputcode" value="<?php echo $coupon_code; ?>">
 					</div>
-					<div class="text-danger text-end mt-2"><?php echo $errEnd_time; ?></div>
+					<div class="text-danger text-end mt-2"><?php echo $errCoupon_code; ?></div>
 				</div>
-			</div>
-      <!-- 操作按鈕 -->
-			<div class="d-flex justify-content-end">
-        		<span class="text-danger"><?php echo $errDBMessage; ?></span>
-				<input class="btn btn-primary" type="submit" name="Submit" value="新增" />
-				<a class="btn btn-outline-danger ms-3" href="coupon_index.php">取消</a>
-			</div>
-      <div id="insert">
-        <?php echo $errDBMessage; // 顯示錯誤訊息 ?>
-        <input type="hidden" name="MM_insert" value="form1" />
-      </div>
-    </form>
+				<!-- 折抵金額 -->
+				<div class="col-6 mb-3">
+					<div class="d-flex align-items-center">
+						<label for="Inputamo" class="form-label me-3 fw-bold">折抵金額</label>
+						<input class="Inputbox w-100 py-2" name="amount" type="number" class="border-3 form-control" id="Inputamo" value="<?php echo $amount; ?>">
+					</div>
+					<div class="text-danger text-end mt-2"><?php echo $errAmount; ?></div>
+				</div>
+				<!-- 金額限制 -->
+				<div class="col-6 mb-3">
+					<div class="d-flex align-items-center">
+						<label for="Inputmin" class="form-label me-3 fw-bold">金額限制</label>
+						<input class="Inputbox w-100 py-2" name="min_point" type="number" class="border-3 form-control" id="Inputmin" value="<?php echo $min_point; ?>">
+					</div>
+					<div class="text-danger text-end mt-2"><?php echo $errMin_point; ?></div>
+				</div>
+				<!-- 發放數量 -->
+				<div class="col-6 mb-3">
+					<div class="d-flex align-items-center">
+						<label class="form-label me-3 fw-bold">發放數量</label>
+						<div class="d-flex w-100 align-items-center">
+							<div>
+								<input name="quant" class="form-check-input" type="radio" id="Inputquaunlimited" <?php echo $quantity == -1 ? "checked" : "" ?>>
+								<label class="form-check-label" for="Inputquaunlimited">無限制</label>
+							</div>
+							<div class="ms-2">
+								<input name="quant" class="form-check-input" type="radio" id="InpuInputquauny" <?php echo $quantity == -1 ? "" : "checked" ?>>
+								<label class="form-check-label me-3" for="InpuInputquauny">輸入數量</label>
+							</div>
+							<input class="Inputbox w-100 py-2" style="display: none;" name="quantity" type="number" min="-1" class="form-control w-100 ms-2 border-3" id="Inputqua" value="<?php echo $quantity == -1 ? -1 : $quantity; ?>">
+						</div>
+					</div>
+					<div id="errQua" class="text-danger text-end mt-2"><?php echo $errQuantity; ?></div>
+				</div>
+				<!-- 限領張數 -->
+				<div class="col-6 mb-3">
+					<div class="d-flex align-items-center">
+						<label class="form-label me-3 fw-bold">限領張數</label>
+						<!-- <input name="per_limit" type="checkbox" class="form-control" id="Inputper"> -->
+						<div class="d-flex w-100 align-items-center">
+							<div>
+								<input name="limit" class="form-check-input" type="radio" id="radiounlimited" <?php echo $per_limit == -1 ? "checked" : "" ?>>
+								<label class="form-check-label" for="radiounlimited">無限制</label>
+							</div>
+							<div class="ms-2">
+								<input name="limit" class="form-check-input" type="radio" id="radiolimit" <?php echo $per_limit == -1 ? "" : "checked" ?>>
+								<label class="form-check-label me-3" for="radiolimit">輸入數量</label>
+							</div>
+							<input class="Inputbox w-100 py-2" style="display: none;" name="per_limit" type="number" min="-1" class="form-control w-100 ms-2 border-3" id="Inputper" value="<?php echo $per_limit == -1 ? -1 : $per_limit; ?>">
+						</div>
+					</div>
+					<div id="errlimit" class="text-danger text-end mt-2"><?php echo $errPer_limit; ?></div>
+				</div>
+				<!-- 優惠券類型 -->
+				<div class="col-6 mb-3">
+					<div class="d-flex align-items-center">
+						<label for="Input_c_type" class="form-label me-3 fw-bold">優惠券類型</label>
+						<select class="Inputbox w-100 py-2" class="form-select border-3" id="Input_c_type" name="coupon_type" required>
+							<option value="0" selected>請選擇</option>
+							<option value="1" <?php echo $coupon_type == "1" ? "selected" : "" ?>>免運券</option>
+							<option value="2" <?php echo $coupon_type == "2" ? "selected" : "" ?>>註冊禮券</option>
+							<option value="3" <?php echo $coupon_type == "3" ? "selected" : "" ?>>生日禮券</option>
+							<option value="4" <?php echo $coupon_type == "4" ? "selected" : "" ?>>購物禮券</option>
+							<option value="5" <?php echo $coupon_type == "5" ? "selected" : "" ?>>平台禮券</option>
+						</select>
+					</div>
+					<div class="text-danger text-end mt-2"><?php echo $errCoupon_type; ?></div>
+				</div>
+				<!-- 使用類型 -->
+				<div class="col-6 mb-3">
+					<div class="d-flex align-items-center">
+						<div class="mb-3 me-3 fw-bold">使用類型</div>
+						<div class="btn-group mb-3 w-100" role="group" aria-label="Basic radio toggle button group">
+							<input type="radio" class="btn-check" name="use_type" id="alluse" autocomplete="off" value="0" checked>
+							<label class="btn btn-outline-primary" for="alluse">平台通用</label>
+
+							<input type="radio" class="btn-check" name="use_type" id="classuse" autocomplete="off" value="1" <?php echo $use_type == "1" ? "checked" : "" ?>>
+							<label class="btn btn-outline-primary" for="classuse">指定書類</label>
+
+							<input type="radio" class="btn-check" name="use_type" id="bookuse" autocomplete="off" value="2" <?php echo $use_type == "2" ? "checked" : "" ?>>
+							<label class="btn btn-outline-primary" for="bookuse">指定商品</label>
+						</div>
+					</div>
+					<div class="text-danger text-end mt-2"><?php echo $errUse_type; ?></div>
+				</div>
+				<!-- 疊加使用 -->
+				<div class="col-6 mb-3">
+					<div class="d-flex align-items-center">
+						<div class="me-3 fw-bold">疊加使用</div>
+						<div class="d-flex">
+							<div class="form-check m-1">
+								<input class="form-check-input" type="radio" name="overlay" id="overlayon" value="1" <?php echo $overlay == "1" ? "checked" : "" ?>>
+								<label class="form-check-label" for="overlayon">可疊加</label>
+							</div>
+							<div class="form-check m-1">
+								<input class="form-check-input" type="radio" name="overlay" id="overlayout" value="0" checked>
+								<label class="form-check-label" for="overlayout">不可疊加</label>
+							</div>
+						</div>
+						<div class="text-danger text-end mt-2 w-100"><?php echo $errOverlay; ?></div>
+					</div>
+				</div>
+				<!-- 會員等級 -->
+				<div class="col-6 mb-3">
+					<div class="d-flex align-items-center">
+						<label for="memberlv" class="form-label me-3 fw-bold">會員等級</label>
+						<select class="Inputbox w-100 py-2" class="form-select border-3" id="memberlv" aria-label="Default select example" name="level_id" required>
+							<option value="0" selected>請選擇</option>
+							<option value="1" <?php echo $level_id == "1" ? "selected" : "" ?>>無限制</option>
+							<option value="2" <?php echo $level_id == "2" ? "selected" : "" ?>>高級會員</option>
+						</select>
+					</div>
+					<div class="text-danger text-end mt-2"><?php echo $errLevel_id; ?></div>
+				</div>	
+				<!-- 圖片 -->
+				<div class="col-6 mb-3">
+					<div class="d-flex w-100">
+						<label for="Input_icon" class="form-label me-3 fw-bold">圖片</label>
+						<div class="img_border Inputbox border-3 rounded-3 w-100">
+							<img class="w-auto" src="" id="image">
+							<input name="uploadFile" type="file" class="form-control w-auto" id="Input_icon">
+						</div>
+					</div>
+					<div class="text-danger text-end mt-2"><?php echo $errPicture; ?></div>
+				</div>
+				<!-- 開始時間 -->
+				<div class="col-6">
+					<div class="col mb-3">
+						<div class="d-flex align-items-center">
+							<label for="Input_s_time" class="form-label me-3 fw-bold">開始時間</label>
+							<input class="Inputbox w-100 py-2" name="start_time" type="datetime-local" class="form-control border-3" id="Input_s_time" value="<?php echo $start_time; ?>">
+						</div>
+						<div class="text-danger text-end mt-2"><?php echo $errStart_time; ?></div>
+					</div>
+				<!-- 結束時間 -->
+					<div class="col mb-3">
+						<div class="d-flex align-items-center">
+							<label for="Input_e_time" class="form-label me-3 fw-bold">結束時間</label>
+							<input class="Inputbox w-100 py-2" name="end_time" type="datetime-local" class="form-control border-3" id="Input_e_time" value="<?php echo $end_time; ?>">
+						</div>
+						<div class="text-danger text-end mt-2"><?php echo $errEnd_time; ?></div>
+					</div>
+				</div>
+		<!-- 操作按鈕 -->
+				<div class="d-flex justify-content-end">
+					<span class="text-danger"><?php echo $errDBMessage; ?></span>
+					<input class="btn btn-primary searchon" type="submit" name="Submit" value="新增" />
+					<a class="btn btn-danger ms-3 searchon" href="coupon_index.php">取消</a>
+				</div>
+		<div id="insert">
+			<?php echo $errDBMessage; // 顯示錯誤訊息 ?>
+			<input type="hidden" name="MM_insert" value="form1" />
+		</div>
+		</form>
+	</div>
   </div>
 <script type="text/javascript">
   function setFocus(fld) {
@@ -384,42 +398,58 @@ if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
 	const radiolimit = document.querySelector('#radiolimit');
 	const Inputper = document.getElementById('Inputper');
 	const errlimit = document.getElementById('errlimit');
-	const Input_icon = document.getElementById('Input_icon');
 
-	if (radiounlimited.checked) {
-		Inputper.style.display = 'none';
-	} else if (radiolimit.checked) {
-		Inputper.style.display = 'block';
-	}
-
-	radiolimit.addEventListener('change', function() {
-		if (this.checked) {
-			Inputper.style.display = 'block';
-			Inputper.value = "";
-			errlimit.style.display = 'block';
-
-		} else {
-			Inputper.style.display = 'none';
-			errlimit.style.display = 'none';
+  	//x, y, z, w = 無限制, 限制, 數量, 錯誤訊息
+  	function withRestrictions(x, y, z, w){
+		if (x.checked) {
+			z.style.display = 'none';
+		} else if (y.checked) {
+			z.style.display = 'block';
 		}
-	});
 
-	radiounlimited.addEventListener('change', function() {
-		if (this.checked) {
-			Inputper.style.display = 'none';
-			errlimit.style.display = 'none';
-			Inputper.value = -1;
-		} else {
-			Inputper.style.display = 'block';
-			errlimit.style.display = 'block';
-		}
-	});
+		y.addEventListener('change', function() {
+			if (this.checked) {
+				z.style.display = 'block';
+				z.value = "";
+				w.style.display = 'block';
+
+			} else {
+				z.style.display = 'none';
+				w.style.display = 'none';
+			}
+		});
+
+		x.addEventListener('change', function() {
+			if (this.checked) {
+				z.style.display = 'none';
+				w.style.display = 'none';
+				z.value = 1;
+			} else {
+				z.style.display = 'block';
+				w.style.display = 'block';
+			}
+		});
+	};
+
+	withRestrictions(radiounlimited,radiolimit,Inputper,errlimit);
+
+	const Inputquaunlimited = document.querySelector('#Inputquaunlimited');
+	const InpuInputquauny = document.querySelector('#InpuInputquauny');
+	const Inputqua = document.getElementById('Inputqua');
+	const errQua = document.getElementById('errQua');
+
+	withRestrictions(Inputquaunlimited,InpuInputquauny,Inputqua,errQua);
+
 </script>
 <script>
+	const Input_icon = document.getElementById('Input_icon');
 	const image = document.getElementById('image');
 	Input_icon.onchange = function() {
 		image.src = URL.createObjectURL(Input_icon.files[0]);
 	};
+</script>
+<script>
+	
 </script>
 </body>
 </html>

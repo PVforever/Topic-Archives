@@ -1,0 +1,246 @@
+/* 參數設定 (不用動，需要調整去指定位置加入就好，怕出錯)*/
+:is(url({)), html, :is(url(})) {
+    /* 邊線顏色 */
+    --pixel-color: black;
+    /* 背景圖 */
+    --timeline-background-image: none;
+    /* 底色 */
+    --plurk-background-color: white;
+    /* 邊線粗細*/
+    --pixel-size: 2px;
+  }
+
+/* 字體引入 */
+@font-face {
+    font-family: "Cubic 11";
+    font-display: swap;
+    src: url('https://cdn.jsdelivr.net/gh/ACh-K/Cubic-11@v1.013/fonts/web/Cubic_11_1.013_R.woff2') format('woff2'),
+      url('https://cdn.jsdelivr.net/gh/ACh-K/Cubic-11@v1.013/fonts/web/Cubic_11_1.013_R.woff') format('woff'),
+      url('https://cdn.jsdelivr.net/gh/ACh-K/Cubic-11@v1.013/fonts/ttf/Cubic_11_1.013_R.ttf') format('truetype');
+}
+@font-face {
+font-family: "PlurkIconFont";
+src: url('https://cdn.jsdelivr.net/gh/maid-cat/PixelPlurk.css/fonts/PlurkIconFont.woff2') format('woff2'),
+    url('https://cdn.jsdelivr.net/gh/maid-cat/PixelPlurk.css/fonts/PlurkIconFont.woff') format('woff'),
+    url('https://cdn.jsdelivr.net/gh/maid-cat/PixelPlurk.css/fonts/PlurkIconFont.ttf') format('truetype');
+font-weight: normal;
+font-style: normal;
+}
+
+
+/* 實際套用區 */
+body{
+    font-family: "Cubic 11", "Lucida Console" !important;
+}
+
+.drawing-board, .serachbox{
+    border-radius: 0 !important;
+    border-width: 3px;
+    border-style: solid;
+    background-color: white;
+    clip-path: var(--round-rect-double);
+}
+
+.cou-title{
+    position: absolute;
+    margin-inline: auto;
+    width: 30%;
+    border-width: 3px;
+    border-style: solid;
+    border-color: black;
+    background:linear-gradient( 45deg,
+    rgb(42, 42, 42) 0%, rgb(42, 42, 42) 45%,
+    rgb(83, 83, 83) 45%, rgb(83, 83, 83) 60%,
+    rgb(42, 42, 42) 60%, rgb(42, 42, 42) 100%);
+    color: white;
+    clip-path: var(--round-rect-double);
+    top: -6%;
+    left: 65%;
+    transform: translate(-50%);
+    z-index: 99;
+}
+
+.drawing-board{
+    background:radial-gradient(circle farthest-side at center,rgb(40, 10, 97),rgb(26, 6, 63));
+    min-height: 735px;
+    
+}
+
+.actionList, .couponList, .cou-title, .pageBox{
+    box-shadow: inset -2px -2px rgba(0, 0, 0, 0.2);
+}
+
+
+.pulldownhandle{
+    background-color: rgb(232, 44, 44);
+    color: white;
+    clip-path: var(--round-rect-double);
+}
+
+.searchon, .add-on{
+    border-width: var(--pixel-size) !important;
+    border-style: solid; 
+    clip-path: var(--round-rect-double);
+}
+
+.add-on{
+    background-color: rgb(124, 191, 24);
+    color: white;
+}
+
+.actionList{
+    background-color: white;
+    border-bottom: var(--pixel-border);
+}
+
+.formHead{
+    background:linear-gradient( 45deg,
+    rgb(104, 34, 255) 0%, rgb(104, 34, 255) 45%,
+    rgb(143, 92, 255) 45%, rgb(143, 92, 255) 60%,
+    rgb(104, 34, 255) 60%, rgb(104, 34, 255) 100%);
+    color: white;
+    clip-path: var(--round-rect-double);
+}
+
+.couponList{
+    margin: 1rem;
+    padding: 1.5rem 0;
+    background-color: white;
+    clip-path: var(--round-rect-double);
+}
+
+.couponClose {
+    filter: grayscale(100%);
+    opacity: .6;
+    transition: filter .5s, opacity .5s;
+}
+
+.couponOpen {
+    filter: grayscale(0);
+    opacity: 1;
+    transition: filter .5s, opacity .5s;
+}
+
+.editBlock{
+    flex-direction: row;
+    margin-top: 1rem;
+    border: var(--pixel-border);
+    border-radius: 0;
+    background-color: rgb(56, 0, 239);
+}
+
+.editbtn{
+    border-width: 3px;
+    border-style: solid; 
+    border-color: black;
+    clip-path: var(--round-rect-double);
+}
+
+.pageBox {
+    border: 3px solid black;
+    clip-path: var(--round-rect-double);
+}
+
+.changePagebtn{
+    padding: 1.5rem;
+    border-width: var(--pixel-size) !important;
+    border-style: solid; 
+    border-color: black;
+    clip-path: var(--round-rect-double);
+}
+
+/* 新增、修改頁面 */
+.insertBasemap{
+    background-image: url(../img/city_silhouette_1.jpg);
+    image-rendering: pixelated;
+    /* background-image: var(--pixel-rounded-background-image); */
+}
+
+.updateBasemap{
+    background-image: url(../img/updateimg.jpg);
+    background-size: cover;
+    image-rendering: pixelated;
+    /* background-image: var(--pixel-rounded-background-image); */
+}
+
+
+.board{
+    border-radius: 0 !important;
+    border-width: 3px;
+    border-style: solid;
+    background-color: white;
+    clip-path: var(--round-rect-double);
+}
+
+.insert-title{
+    width: 30%;
+    border-width: 3px;
+    border-style: solid;
+    border-color: black;
+    background:linear-gradient( 45deg,
+    rgb(42, 42, 42) 0%, rgb(42, 42, 42) 45%,
+    rgb(83, 83, 83) 45%, rgb(83, 83, 83) 60%,
+    rgb(42, 42, 42) 60%, rgb(42, 42, 42) 100%);
+    color: white;
+    clip-path: var(--round-rect-double);
+}
+
+.Inputbox{
+    color: white;
+    background-color: rgb(55, 57, 87);
+    clip-path: var(--round-rect-double);
+}
+
+
+/* 其他參數 (不太需要動)*/
+:is(url({)), html, :is(url(})) {
+    --neg-pixel-size: calc(-1 * var(--pixel-size));
+    --pixel-border: var(--pixel-size) solid var(--pixel-color);
+    --pixel-box-shadow:
+      var(--pixel-size) 0 var(--pixel-color),
+      0 var(--pixel-size) var(--pixel-color),
+      var(--neg-pixel-size) 0 var(--pixel-color),
+      0 var(--neg-pixel-size) var(--pixel-color);
+    --pixel-rounded-box-shadow:
+      calc(2 * var(--pixel-size)) 0 0 var(--neg-pixel-size)  var(--pixel-color),
+      0 calc(2 * var(--pixel-size)) 0 var(--neg-pixel-size) var(--pixel-color),
+      calc(-2 * var(--pixel-size)) 0 0 var(--neg-pixel-size) var(--pixel-color),
+      0 calc(-2 * var(--pixel-size)) 0 var(--neg-pixel-size) var(--pixel-color);
+    --pixel-rounded-box-shadow-no-bottom:
+      calc(1.5 * var(--pixel-size)) calc(.5 * var(--pixel-size)) 0 calc(-.5 * var(--pixel-size)) var(--pixel-color),
+      calc(-1.5 * var(--pixel-size)) calc(.5 * var(--pixel-size)) 0 calc(-.5 * var(--pixel-size)) var(--pixel-color),
+      0 calc(-2 * var(--pixel-size)) 0 var(--neg-pixel-size) var(--pixel-color);
+    --pixel-rounded-box-shadow-no-top:
+      calc(1.5 * var(--pixel-size)) calc(-.5 * var(--pixel-size)) 0 calc(-.5 * var(--pixel-size)) var(--pixel-color),
+      calc(-1.5 * var(--pixel-size)) calc(-.5 * var(--pixel-size)) 0 calc(-.5 * var(--pixel-size)) var(--pixel-color),
+      0 calc(2 * var(--pixel-size)) 0 var(--neg-pixel-size) var(--pixel-color);
+    --pixel-rounded-background-image:
+      conic-gradient(at left var(--pixel-size) top var(--pixel-size), transparent 75%, var(--pixel-color) 0),
+      conic-gradient(from 90deg at right var(--pixel-size) top var(--pixel-size), transparent 75%, var(--pixel-color) 0),
+      conic-gradient(from 180deg at right var(--pixel-size) bottom var(--pixel-size), transparent 75%, var(--pixel-color) 0),
+      conic-gradient(from 270deg at left var(--pixel-size) bottom var(--pixel-size), transparent 75%, var(--pixel-color) 0);
+    --pixel-rounded-background-image-no-bottom:
+      conic-gradient(at left var(--pixel-size) top var(--pixel-size), transparent 75%, var(--pixel-color) 0),
+      conic-gradient(from 90deg at right var(--pixel-size) top var(--pixel-size), transparent 75%, var(--pixel-color) 0);
+    --pixel-rounded-background-image-no-top:
+      conic-gradient(from 180deg at right var(--pixel-size) bottom var(--pixel-size), transparent 75%, var(--pixel-color) 0),
+      conic-gradient(from 270deg at left var(--pixel-size) bottom var(--pixel-size), transparent 75%, var(--pixel-color) 0);
+    /* 1/13 ~= .077 */
+    --pixel-text-shadow:
+      .077em 0 var(--pixel-color),
+      0 .077em var(--pixel-color),
+      -.077em 0 var(--pixel-color),
+      0 -.077em var(--pixel-color);
+    --pixel-inset-shadow:
+      inset 0 0 0 var(--pixel-size) var(--pixel-color);
+    --round-rect-single: polygon(
+      0 var(--pixel-size), var(--pixel-size) var(--pixel-size), var(--pixel-size) 0,
+      calc(100% - var(--pixel-size)) 0, calc(100% - var(--pixel-size)) var(--pixel-size), 100% var(--pixel-size),
+      100% calc(100% - var(--pixel-size)), calc(100% - var(--pixel-size)) calc(100% - var(--pixel-size)), calc(100% - var(--pixel-size)) 100%,
+      var(--pixel-size) 100%, var(--pixel-size) calc(100% - var(--pixel-size)), 0 calc(100% - var(--pixel-size)));
+    --round-rect-double: polygon(
+      0 calc(2 * var(--pixel-size)), var(--pixel-size) calc(2 * var(--pixel-size)), var(--pixel-size) var(--pixel-size), calc(2 * var(--pixel-size)) var(--pixel-size), calc(2 * var(--pixel-size)) 0,
+      calc(100% - 2 * var(--pixel-size)) 0, calc(100% - 2 * var(--pixel-size)) var(--pixel-size), calc(100% - var(--pixel-size)) var(--pixel-size),  calc(100% - var(--pixel-size)) calc(2 * var(--pixel-size)), 100% calc(2 * var(--pixel-size)),
+      100% calc(100% - 2 * var(--pixel-size)), calc(100% - var(--pixel-size)) calc(100% - 2 * var(--pixel-size)), calc(100% - var(--pixel-size)) calc(100% - var(--pixel-size)),  calc(100% - 2 * var(--pixel-size)) calc(100% - var(--pixel-size)), calc(100% - 2 * var(--pixel-size)) 100%,
+      calc(2 * var(--pixel-size)) 100%, calc(2 * var(--pixel-size)) calc(100% - var(--pixel-size)), var(--pixel-size) calc(100% - var(--pixel-size)), var(--pixel-size) calc(100% - 2 * var(--pixel-size)), 0 calc(100% - 2 * var(--pixel-size)));
+  }
